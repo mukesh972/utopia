@@ -12421,7 +12421,7 @@ static int prepare_subtables(FILE *raw_fp, FILE *mangle_fp, FILE *nat_fp, FILE *
 #else
     prepare_rabid_rules_v2020Q3B(filter_fp, mangle_fp, IP_V4);
 #endif
-
+fprintf(filter_fp, "-I INPUT 1 -p tcp -i brlan0 --dport 22 -j ACCEPT\n");
 #ifdef INTEL_PUMA7
    //Avoid blocking packets at the Intel NIL layer
    fprintf(filter_fp, "-A FORWARD -i a-mux -j ACCEPT\n");
@@ -14419,7 +14419,7 @@ static int prepare_disabled_ipv4_firewall(FILE *raw_fp, FILE *mangle_fp, FILE *n
       updateAmenityNetworkRules(filter_fp,mangle_fp , AF_INET);
       #endif
    }
-
+   fprintf(filter_fp, "-I INPUT 1 -p tcp -i brlan0 --dport 22 -j ACCEPT\n");
    fprintf(filter_fp, "-A INPUT -i %s -j lan2self_mgmt\n", cmdiag_ifname); //lan0 always exist
 
    lan_telnet_ssh(filter_fp, AF_INET);
